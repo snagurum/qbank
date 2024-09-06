@@ -1,4 +1,7 @@
- var temp = [{
+function getData(){
+return [
+
+  {
     no: 1,
     question: "what is demacron and cumon",
     options: ["a option", "b option", "c option"],
@@ -25,4 +28,6 @@
     correctOptions: ["d option", "e option", "f option"]
   }];
 
-//  console.log(" log ",temp);
+
+
+}

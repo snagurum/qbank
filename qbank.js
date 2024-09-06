@@ -1,29 +1,44 @@
-  var LOG_LEVEL = "info";
+/* meta data
+{
+-------------- given ------------
+    no:                    1,
+    question:              "what is demacron and cumon",
+    options:               ["a option", "b option", "c option"],
+    correctOptions:        ["d option", "e option", "f option"]
+-------------- evaluated  ------------
+    displayOptions:        []
+    answers:               []
+    status:                ""        ["unanswered","skipped","correct","wrong"]
+}
+*/
 
-  function debug(str, obj){
-    if(LOG_LEVEL = "info")
-      console.log( str, obj );
-  }
+
+  log = {
+    LOG_LEVEL: "info",
+    info: function(){
+            if(log.LOG_LEVEL == "info")
+                 console.log(arguments.values());
+//               arguments.forEach(function(item,index){
+//                 console.log(item);
+//               });
+          }
+  };
+
 
   const shuffle = ( array ) => {
-//    console.log("array.length = ", array.length);
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-//      console.log(i,j," = ",j, i);
       [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
   };
 
 
-  const prepareOptions = ( array ) => {
+  const shuffleOptions = ( array ) => {
     array.forEach(function(item, index){
       item.displayOptions = shuffle(item.options.concat(item.correctOptions));
-//      console.log("item = ",item);
     });
   }
-  var shuffledArray = shuffle(temp);
-  debug(" log  === > ", shuffledArray);
 
-  prepareOptions(shuffledArray);
-  debug(" log  === > ", shuffledArray);
+
+
