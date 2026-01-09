@@ -2,53 +2,95 @@
 <html>
 <head>
 <title>Welcome to qbank!</title>
-<!--
-<style>
-    body {
-        width: 35em;
-        margin: 0 auto;
-        font-family: Tahoma, Verdana, Arial, sans-serif;
-    }
-</style>
--->
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="qbank.css">
+
 </head>
 <body>
 <div class="container mt-sm-5 my-1">
-    <div class="question ml-sm-5 pl-sm-5 pt-2">
-        <div class="py-2 h5"><b>Q. which option best describes your job role?</b></div>
-        <div class="ml-md-3 ml-sm-3 pl-md-5 pt-sm-0 pt-3" id="options">
-            <label class="options">Small Business Owner or Employee
-                <input type="radio" name="radio">
-                <span class="checkmark"></span>
-            </label>
-            <label class="options">Nonprofit Owner or Employee
-                <input type="radio" name="radio">
-                <span class="checkmark"></span>
-            </label>
-            <label class="options">Journalist or Activist
-                <input type="radio" name="radio">
-                <span class="checkmark"></span>
-            </label>
-            <label class="options">Other
-                <input type="radio" name="radio">
-                <span class="checkmark"></span>
-            </label>
-        </div>
-    </div>
+
     <div class="d-flex align-items-center pt-3">
-        <div id="prev">
-            <button class="btn btn-primary">Previous</button>
+        <div class="ml-auto mr-sm-5">
+            <label class="text-primary fw-bold h4" id="questionNo" >current/total</label>
         </div>
         <div class="ml-auto mr-sm-5">
-            <button class="btn btn-success">Next</button>
+            <button class="btn btn-success" id="validateButton" >Validate</button>
         </div>
     </div>
-</div>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"/>
 
+    <div id='questionsPanel'>
+    </div>
+
+    <div class="d-flex align-items-center pt-3">
+        <div class="ml-auto mr-sm-5">
+            <button class="btn btn-success" id="previousButton" >Previous</button>
+        </div>
+        <div class="ml-auto mr-sm-5">
+            <button class="btn btn-success" id="nextButton" >Next</button>
+        </div>
+    </div>
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"> </script>
+<script type = "text/javascript" src="./qbank.data.c03-8.js"> </script >
+<!-- 
+<script type = "text/javascript" src="./qbank.data.c03-7.js"> </script >
+<script type = "text/javascript" src="./qbank.data.c03-6.js"> </script >
+<script type = "text/javascript" src="./qbank.data.c03-5.js"> </script >
+<script type = "text/javascript" src="./qbank.data.c03-4.js"> </script >
+<script type = "text/javascript" src="./qbank.data.c03-3.js"> </script >
+<script type = "text/javascript" src="./qbank.data.c03-2.js"> </script >
+<script type = "text/javascript" src="qbank.data.c03-1.js"> </script > 
+-->
+<script type = "text/javascript" src = "./qbank.js" >  </script >
+
+
+<script type="text/javascript" >
+
+function quiz(){
+  let exam = getExam();
+//  <!-- console.log('log exam',exam); -->
+
+  exam.questions = shuffle(getData());
+  shuffleOptions(exam.questions);
+
+  console.log("questionBank = ", exam.questions);
+
+  $('#questionsPanel').append(exam.getQuestionHtml());
+
+  $("#previousButton").click(function(){
+       exam.prevQ('#questionsPanel');
+       printQuestionNo(exam);
+  });
+
+  $("#nextButton").click(function(){
+       exam.nextQ('#questionsPanel');
+       printQuestionNo(exam);
+  });
+
+  $("#validateButton").click(function(){
+       validateAllQuestions(exam.questions);
+  });
+
+}
+
+function printQuestionNo(exam){
+    $('#questionNo').text(""+(exam.index+1)+" / "+exam.questions.length);
+    console.log('question.id = ', exam.questions[exam.index].no);
+}
+
+function allInOne(){
+  quiz();
+}
+
+$( document ).ready(function() {
+
+//quiz();
+allInOne();
+});
+</script>
 </body>
 
 </html>
