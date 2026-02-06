@@ -49,37 +49,39 @@
 
 <script type="text/javascript" >
 
-function quiz(){
-  let exam = getExam();
-//  <!-- console.log('log exam',exam); -->
+    exam = null;
 
-  exam.questions = shuffle(getData());
-  shuffleOptions(exam.questions);
+function quiz(){
+  exam = getExam();
+    exam.initialize(getData());
+//  exam.questions = shuffle(getData());
+//  shuffleOptions(exam.questions);
 
   console.log("questionBank = ", exam.questions);
 
   $('#questionsPanel').append(exam.getQuestionHtml());
 
   $("#previousButton").click(function(){
-       exam.prevQ('#questionsPanel');
-       printQuestionNo(exam);
+        exam.prevQ('#questionsPanel');
+        $('#questionsPanel').trigger('questionChanged');
   });
 
   $("#nextButton").click(function(){
-       exam.nextQ('#questionsPanel');
-       printQuestionNo(exam);
+        exam.nextQ('#questionsPanel');
+        $('#questionsPanel').trigger('questionChanged');
   });
 
   $("#validateButton").click(function(){
        validateAllQuestions(exam.questions);
   });
 
-}
-
-function printQuestionNo(exam){
+  $('#questionsPanel').on("questionChanged",function(){
     $('#questionNo').text(""+(exam.index+1)+" / "+exam.questions.length);
     console.log('question.id = ', exam.questions[exam.index].no);
+  })
 }
+
+
 
 function allInOne(){
   quiz();

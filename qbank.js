@@ -36,7 +36,7 @@
     });
   }
 
-  function printAnswers(answers) {
+  function displaySelectedOption(answers) {
     $.each(answers, function(index, value) {
       $('input.form-check-input[type="checkbox"][value="' + value + '"]').prop('checked', true);
     });
@@ -55,6 +55,8 @@
         else question.status = "WRONG"
       }
   }
+
+
   function validateAllQuestions(questions){
     $.each(questions, function(index,question){
       validateQuestion(question);
@@ -69,6 +71,17 @@
     console.log("failed Questions = ",failedQuestions);
     console.log("stats = ",score,"/", questions.length, " percentile = ", (score*100/questions.length));
   }
+
+function filterByAllTags(questions, tags) {
+  return $.grep(questions, function (q) {
+    if (!Array.isArray(q.tags)) return false;
+
+    return tags.every(function (t) {
+      return q.tags.includes(t);
+    });
+  });
+}
+
 
 let QUESTION_BLOCK = ''                           +
    '<div class="question ml-sm-5 pl-sm-5 pt-2">' +
@@ -108,29 +121,43 @@ function getExam(){
               replace('!@#$%___QUESTION_DATA___%$#@!',this.questions[this.index].question).
               replace('!@#$%___OPTION_BLOCK___%$#@!' ,displayOptionsHtml);
          },
+      saveAnswers: function(){
+           var answers=getAnswers('.form-check-input:checkbox:checked');
+           this.questions[this.index].answers = answers;
+         },
       prevQ: function(divId ){
+           this.saveAnswers();
            if(this.index > 0){
              this.index--;
              $(divId ).empty();
              $(divId ).append(this.getQuestionHtml());
-             printAnswers(this.questions[this.index].answers);
+             displaySelectedOption(this.questions[this.index].answers);
            }
          },
       nextQ: function(divId ){
-           var answers=getAnswers('.form-check-input:checkbox:checked');
-           this.questions[this.index].answers = answers;
+           this.saveAnswers();
            if( this.index < this.questions.length-1){
              this.index++;
              $(divId ).empty();
              $(divId ).append(this.getQuestionHtml());
-             printAnswers(this.questions[this.index].answers);
+             displaySelectedOption(this.questions[this.index].answers);
           }
          },
       logStatus:function(){
            console.log('----------------------')
            console.log('exam.index = ', this.index);
            console.log('questoin = ', this.questions[exam.index]);
-         }
+         },
+      initialize:function(data){
+          this.questions = shuffle(data);
+          shuffleOptions(this.questions);
+          this.index = 0;
+          return this;
+        },
+      filter:function(data){
+        temp = filterByAllTags(this.questions, data);
+        this.initialize(temp);
+      }
    };
 }
 
